@@ -10,6 +10,7 @@ import cst_;
 import queue	;
 
 import core.thread	;
+import core.atomic	;
 import std.socket	;
 
 
@@ -36,7 +37,7 @@ class SocketMsgQueue {
 	}
 	
 	public bool closed() @property {
-		return _closed;
+		return _closed.atomicLoad!(MemoryOrder.raw);
 	}
 	
 	auto empty()	{ return queue.empty	;	}
@@ -70,7 +71,7 @@ private class MsgThread : Thread {
 
 			ptrdiff_t length = socket.receive(buffer[readLength..$]);
 			if (length==0 || length==Socket.ERROR) {
-				_closed = true;
+				_closed.atomicStore!(MemoryOrder.raw)(true);
 				continue;
 			}
 			////readLength += length;
