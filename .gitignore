@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+socket-msg-queue.so
+socket-msg-queue.dylib
+socket-msg-queue.dll
+socket-msg-queue.a
+socket-msg-queue.lib
+socket-msg-queue-test-*
+*.exe
+*.o
+*.obj
+*.lst

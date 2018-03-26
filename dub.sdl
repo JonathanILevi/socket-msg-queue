@@ -1,0 +1,6 @@
+name "socket-msg-queue"
+description "Breaks a TCP socket stream into messages easy to deal with messages."
+authors "Jonathan Levi"
+copyright "Copyright © 2018, Jonathan Levi"
+license "CC0"
+dependency "cst" version="~>1.0.4"
