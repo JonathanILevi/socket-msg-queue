@@ -75,6 +75,7 @@ private class MsgThread : Thread {
 
 			ptrdiff_t length = socket.receive(buffer[readLength..$]);
 			if (length==0 || length==Socket.ERROR) {
+				(*_closed).atomicStore(true); 
 				continue;
 			}
 			////readLength += length;
