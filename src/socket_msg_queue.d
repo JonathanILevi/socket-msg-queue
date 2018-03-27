@@ -36,7 +36,7 @@ class SocketMsgQueue {
 		msgThread.start();
 	}
 	
-	public bool closed() @property {
+	public @property bool closed() {
 		return _closed.atomicLoad;
 	}
 	
@@ -48,17 +48,17 @@ class SocketMsgQueue {
 private class MsgThread : Thread {
 	private:
 
-	public this(Socket socket, Queue!(ubyte[]) queue, shared bool _closed) {
+	public this(Socket socket, Queue!(ubyte[]) queue, ref shared bool _closed) {
 		this.socket	= socket	;
 		this.queue	= queue	;
-		this._closed	= _closed	;
+		this._closed	= &_closed	;
 
 		super(&run);
 	}
 	
 	Socket	socket	;
 	Queue!(ubyte[])	queue	;
-	shared bool	_closed	;
+	shared bool*	_closed	;
 			
 	ubyte[258]	buffer	;// 258 = 255+3  (max msg size (ubyte) plus header)
 	ubyte[]	partialMsg	;
@@ -71,7 +71,6 @@ private class MsgThread : Thread {
 
 			ptrdiff_t length = socket.receive(buffer[readLength..$]);
 			if (length==0 || length==Socket.ERROR) {
-				_closed.atomicStore(true);
 				continue;
 			}
 			////readLength += length;
