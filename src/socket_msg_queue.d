@@ -1,6 +1,6 @@
 /**
-MsgQueue takes a socket and recieves and converts the buffer to mesages to individual mesages.
-MsgQueue assumes that the first byte of a msg is the mesages length + 3(for msg header).
+SocketMsgQueue takes a socket and recieves and converts the buffer to individual mesages.
+SocketMsgQueue assumes that the first byte of a msg is the mesages length + 3(for msg header).  (This is to be improved.)
 */
 
 
@@ -37,7 +37,7 @@ class SocketMsgQueue {
 	}
 	
 	public bool closed() @property {
-		return _closed.atomicLoad!(MemoryOrder.raw);
+		return _closed.atomicLoad;
 	}
 	
 	auto empty()	{ return queue.empty	;	}
@@ -71,7 +71,7 @@ private class MsgThread : Thread {
 
 			ptrdiff_t length = socket.receive(buffer[readLength..$]);
 			if (length==0 || length==Socket.ERROR) {
-				_closed.atomicStore!(MemoryOrder.raw)(true);
+				_closed.atomicStore(true);
 				continue;
 			}
 			////readLength += length;
